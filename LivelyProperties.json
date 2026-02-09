@@ -13,6 +13,17 @@
     "value": false,
     "text": "Random Splats"
   },
+  "audioSplatType": {
+    "type": "dropdown",
+    "value": 0,
+    "text": "Audio Splats type",
+    "items": [
+      "Random",
+      "Simple bands",
+      "Full bands"
+    ]
+  },
+
   "label1": {
     "type": "label",
     "value": "Performance"
@@ -200,5 +211,35 @@
     "type": "checkbox",
     "value": false,
     "text": "Enable"
+  },
+
+
+  "label6": {
+    "type": "label",
+    "value": "Advanced"
+  },
+  "volumeExceedThreshold": {
+    "max": 100,
+    "min": 0,
+    "text": "Volume Exceed Threshold %",
+    "type": "slider",
+    "value": 80,
+    "step": 1
+  },
+  "volumeAmbientThreshold": {
+    "max": 100,
+    "min": 0,
+    "text": "Volume Ambient Threshold %",
+    "type": "slider",
+    "value": 10,
+    "step": 1
+  },
+  "ambientSplatInterval": {
+    "max": 60,
+    "min": 1,
+    "text": "Ambient Splat interval /s",
+    "type": "slider",
+    "value": 3,
+    "step": 1
   }
 }

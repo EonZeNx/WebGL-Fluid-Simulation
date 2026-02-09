@@ -75,8 +75,9 @@ function livelyWallpaperPlaybackChanged(data) {
 let timeout;
 let timeoutBool = true;
 let lastBass = 0;
+
 function livelyAudioListener(audioArray) {
-  if (audioArray[0] === 0 || _isSleep == true) {
+  if (audioArray[0] === 0 || _isSleep === true) {
     _runRandom = true;
     return;
   }
@@ -101,8 +102,35 @@ function livelyAudioListener(audioArray) {
 
   bass /= config.FREQ_RANGE * 2 * config.FREQ_MULTI;
 
-  multipleSplats(Math.floor(bass * config.SOUND_SENSITIVITY * 10) - lastBass);
-  lastBass = (bass, Math.floor(bass * config.SOUND_SENSITIVITY * 10));
+  switch (_audioSplatType) {
+    case 0:  // Random splats
+      multipleSplats(Math.floor((bass * config.SOUND_SENSITIVITY) * 10) - lastBass);
+      lastBass = (bass, Math.floor((bass * config.SOUND_SENSITIVITY) * 10));
+      break;
+    case 1:  // Simple band
+      tickSimpleAudio(audioArray);
+      break;
+    case 2:  // Full band
+      tickFullAudio(audioArray);
+      break;
+  }
+
+  let sum = 0;
+  audioArray.forEach(val => sum += Math.min(val, 1));
+
+  if (sum > _volumeExceedThreshold) {
+    tickExceedingVolumeAudio();
+  }
+
+  if (sum < _volumeAmbientThreshold && !isTickingAmbientVolume) {
+    if (volumeAmbientThresholdTimeout === 0) {
+      volumeAmbientThresholdTimeout = setTimeout(() => {
+        ambientAudioSplats(true);
+      }, 5000);
+    }
+  } else {
+    ambientAudioSplats(false);
+  }
 }
 
 function multipleSplats(amount) {
@@ -227,6 +255,18 @@ function livelyPropertyListener(name, val) {
     // case "colorConfig2":
     //     colorConfig=val===""? null:JSON.parse(val);
     //     break;
+    case "audioSplatType":
+      _audioSplatType = val;
+      break;
+    case "volumeExceedThreshold":
+      _volumeExceedThreshold = val / 100;
+      break;
+    case "volumeAmbientThreshold":
+      _volumeAmbientThreshold = val / 100;
+      break;
+    case "ambientSplatInterval":
+      _ambientSplatInterval = val * 1000;
+      break;
   }
 }
 
@@ -245,7 +285,7 @@ function setOverlay(srcPath)
     return;
 
   let src = srcPath.replace("\\", "/");
-  document.getElementById('overlay').style.backgroundImage = `url('${src}')`;
+  // document.getElementById('overlay').style.backgroundImage = `url('${src}')`;
 }
 
 function setOverlaySize(size)
@@ -258,6 +298,7 @@ function setOverlaySize(size)
 function toggleOverlay(val)
 {
   document.getElementById('overlay').style.visibility = !val ? "hidden" : "visible";
+  document.getElementById('overlay').style.visibility = "visible";
 }
 
 function pauseVideoBackground(isPaused)
