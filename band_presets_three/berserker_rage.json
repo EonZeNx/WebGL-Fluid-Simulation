@@ -1,0 +1,74 @@
+{
+  "bass": [
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": 1},
+      "velocity": 0.85,
+      "location": {"x": 0.4, "y": 0.5},
+      "rotation": 180,
+      "bands": [
+        {
+          "colour": {"h": 0, "s": 0.35, "v": 1},
+          "velocity": 0.85
+        }
+      ]
+    },
+    {
+      "colour": {"h": 0.05, "s": 1, "v": 1},
+      "velocity": 0.85,
+      "location": {"x": 0.6, "y": 0.5},
+      "rotation": 0,
+      "bands": [
+        {
+          "colour": {"h": 0, "s": 0.35, "v": 1},
+          "velocity": 0.85
+        }
+      ]
+    }
+  ],
+  "midRange": [
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": 1},
+      "velocity": 0.5,
+      "location": {"x": 0.5, "y": 0.35},
+      "rotation": -90,
+      "bands": []
+    },
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": 1},
+      "velocity": 0.5,
+      "location": {"x": 0.5, "y": 0.65},
+      "rotation": 90,
+      "bands": []
+    }
+  ],
+  "high": [
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": {"min": 0.7, "max": 0.8}},
+      "velocity": 0.25,
+      "location": {"x": {"min": 0.1, "max": 0.4}, "y": {"min": 0.1, "max": 0.4}},
+      "rotation": {"min": -180, "max": 180},
+      "bands": []
+    },
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": {"min": 0.7, "max": 0.8}},
+      "velocity": 0.25,
+      "location": {"x": {"min": 0.1, "max": 0.4}, "y": {"min": 0.6, "max": 0.9}},
+      "rotation": {"min": -180, "max": 180},
+      "bands": []
+    },
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": {"min": 0.7, "max": 0.8}},
+      "velocity": 0.25,
+      "location": {"x": {"min": 0.6, "max": 0.9}, "y": {"min": 0.1, "max": 0.4}},
+      "rotation": {"min": -180, "max": 180},
+      "bands": []
+    },
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": {"min": 0.7, "max": 0.8}},
+      "velocity": 0.25,
+      "location": {"x": {"min": 0.6, "max": 0.9}, "y": {"min": 0.6, "max": 0.9}},
+      "rotation": {"min": -180, "max": 180},
+      "bands": []
+    }
+  ]
+}

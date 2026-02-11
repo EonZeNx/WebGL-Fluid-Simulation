@@ -27,6 +27,8 @@ SOFTWARE.
 const canvas = document.getElementsByTagName("canvas")[0];
 resizeCanvas();
 
+const overlayElement = document.getElementById("overlay");
+
 let config = {
   SIM_RESOLUTION: 128,
   DYE_RESOLUTION: 1024,
@@ -75,8 +77,9 @@ function livelyWallpaperPlaybackChanged(data) {
 let timeout;
 let timeoutBool = true;
 let lastBass = 0;
+
 function livelyAudioListener(audioArray) {
-  if (audioArray[0] === 0 || _isSleep == true) {
+  if (audioArray[0] === 0 || _isSleep === true) {
     _runRandom = true;
     return;
   }
@@ -101,8 +104,35 @@ function livelyAudioListener(audioArray) {
 
   bass /= config.FREQ_RANGE * 2 * config.FREQ_MULTI;
 
-  multipleSplats(Math.floor(bass * config.SOUND_SENSITIVITY * 10) - lastBass);
-  lastBass = (bass, Math.floor(bass * config.SOUND_SENSITIVITY * 10));
+  switch (_audioSplatType) {
+    case 0:  // Random splats
+      multipleSplats(Math.floor((bass * config.SOUND_SENSITIVITY) * 10) - lastBass);
+      lastBass = (bass, Math.floor((bass * config.SOUND_SENSITIVITY) * 10));
+      break;
+    case 1:  // Simple band
+      tickSimpleAudio(audioArray);
+      break;
+    case 2:  // Full band
+      tickFullAudio(audioArray);
+      break;
+  }
+
+  let sum = 0;
+  audioArray.forEach(val => sum += Math.min(val, 1));
+
+  if (sum > _volumeExceedThreshold) {
+    tickExceedingVolumeAudio();
+  }
+
+  if (sum < _volumeAmbientThreshold && !isTickingAmbientVolume) {
+    if (volumeAmbientThresholdTimeout === 0) {
+      volumeAmbientThresholdTimeout = setTimeout(() => {
+        ambientAudioSplats(true);
+      }, 5000);
+    }
+  } else {
+    ambientAudioSplats(false);
+  }
 }
 
 function multipleSplats(amount) {
@@ -227,7 +257,238 @@ function livelyPropertyListener(name, val) {
     // case "colorConfig2":
     //     colorConfig=val===""? null:JSON.parse(val);
     //     break;
+
+    case "threeBandsSrc":
+      loadPresetFromFile(val)
+        .then(updateBandsThree);
+
+      break;
+    case "sevenBandsSrc":
+      loadPresetFromFile(val)
+        .then(updateBandsSeven);
+
+      break;
+    case "audioSplatType":
+      _audioSplatType = val;
+      break;
+    case "volumeExceedThreshold":
+      _volumeExceedThreshold = val / 100;
+      break;
+    case "volumeAmbientThreshold":
+      _volumeAmbientThreshold = val / 100;
+      break;
+    case "ambientSplatInterval":
+      _ambientSplatInterval = val * 1000;
+      break;
   }
+}
+
+function rangeFromJson(value) {
+  if (typeof value === "number") {
+    return Range.fromValue(value);
+  }
+
+  if (value.hasOwnProperty("min") && value.hasOwnProperty("max")) {
+    return Range.fromMinMax(value.min, value.max);
+  }
+
+  return Range.fromZero();
+}
+
+function velocityFromJson(value) {
+  if (typeof value === "number") {
+    return Velocity.fromValue(value);
+  }
+
+  if (value.hasOwnProperty("min") && value.hasOwnProperty("max")) {
+    return Velocity.fromMinMax(value.min, value.max);
+  }
+
+  return Velocity.fromZero();
+}
+
+function rotationFromJson(value) {
+  if (typeof value === "number") {
+    return Rotation.fromValue(value);
+  }
+
+  if (value.hasOwnProperty("min") && value.hasOwnProperty("max")) {
+    return Rotation.fromMinMax(value.min, value.max);
+  }
+
+  return Rotation.fromZero();
+}
+
+function locationFromJson(value) {
+  if (value.hasOwnProperty("x") && value.hasOwnProperty("y")) {
+    return new Location(rangeFromJson(value.x), rangeFromJson(value.y));
+  }
+
+  return new Location(0, 0);
+}
+
+function colourFromJson(value) {
+
+  if (value.hasOwnProperty("h") && value.hasOwnProperty("s") && value.hasOwnProperty("v")) {
+    return new Colour(rangeFromJson(value.h), rangeFromJson(value.s), rangeFromJson(value.v));
+  }
+
+  return new Colour(Range.fromZero(), Range.fromValue(1), Range.fromValue(1));
+}
+
+function simpleBandFromJson(value) {
+  const band = new SimpleBand();
+
+  if (value.hasOwnProperty("colour")) {
+    band.colour = colourFromJson(value.colour);
+  }
+
+  if (value.hasOwnProperty("velocity")) {
+    band.velocity = velocityFromJson(value.velocity);
+  }
+
+  return band;
+}
+
+function bandFromJson(value) {
+  const band = new Band();
+
+  if (value.hasOwnProperty("colour")) {
+    band.colour = colourFromJson(value.colour);
+  }
+
+  if (value.hasOwnProperty("velocity")) {
+    band.velocity = velocityFromJson(value.velocity);
+  }
+
+  if (value.hasOwnProperty("location")) {
+    band.location = locationFromJson(value.location);
+  }
+
+  if (value.hasOwnProperty("rotation")) {
+    band.rotation = rotationFromJson(value.rotation);
+  }
+
+  if (value.hasOwnProperty("bands")) {
+    for (let i = 0; i < value.bands.length; i++) {
+      band.layers.push(simpleBandFromJson(value.bands[i]));
+    }
+  }
+
+
+  return band;
+}
+
+function bandPresetThreeFromJson(json) {
+  const preset = {};
+
+  if (json.hasOwnProperty("bass")) {
+    preset.bass = [];
+
+    for (let i = 0; i < json.bass.length; i++) {
+      preset.bass.push(bandFromJson(json.bass[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("midRange")) {
+    preset.midRange = [];
+
+    for (let i = 0; i < json.midRange.length; i++) {
+      preset.midRange.push(bandFromJson(json.midRange[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("high")) {
+    preset.high = [];
+
+    for (let i = 0; i < json.high.length; i++) {
+      preset.high.push(bandFromJson(json.high[i]));
+    }
+  }
+
+  return preset;
+}
+
+function bandPresetSevenFromJson(json) {
+  const preset = {};
+
+  if (json.hasOwnProperty("subBass")) {
+    preset.subBass = [];
+
+    for (let i = 0; i < json.subBass.length; i++) {
+      preset.subBass.push(bandFromJson(json.subBass[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("bass")) {
+    preset.bass = [];
+
+    for (let i = 0; i < json.bass.length; i++) {
+      preset.bass.push(bandFromJson(json.bass[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("lowMidRange")) {
+    preset.lowMidRange = [];
+
+    for (let i = 0; i < json.lowMidRange.length; i++) {
+      preset.lowMidRange.push(bandFromJson(json.lowMidRange[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("midRange")) {
+    preset.midRange = [];
+
+    for (let i = 0; i < json.midRange.length; i++) {
+      preset.midRange.push(bandFromJson(json.midRange[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("upperMidRange")) {
+    preset.upperMidRange = [];
+
+    for (let i = 0; i < json.upperMidRange.length; i++) {
+      preset.upperMidRange.push(bandFromJson(json.upperMidRange[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("presence")) {
+    preset.presence = [];
+
+    for (let i = 0; i < json.presence.length; i++) {
+      preset.presence.push(bandFromJson(json.presence[i]));
+    }
+  }
+
+  if (json.hasOwnProperty("brilliance")) {
+    preset.brilliance = [];
+
+    for (let i = 0; i < json.brilliance.length; i++) {
+      preset.brilliance.push(bandFromJson(json.brilliance[i]));
+    }
+  }
+
+  return preset;
+}
+
+function updateBandsThree(bands) {
+  const preset = bandPresetThreeFromJson(bands);
+
+  threeBands.bass = preset.bass;
+  threeBands.midRange = preset.midRange;
+  threeBands.high = preset.high;
+}
+
+function updateBandsSeven(bands) {
+  const preset = bandPresetSevenFromJson(bands);
+
+  sevenBands.subBass = preset.subBass;
+  sevenBands.bass = preset.bass;
+  sevenBands.lowMidRange = preset.lowMidRange;
+  sevenBands.midRange = preset.midRange;
+  sevenBands.upperMidRange = preset.upperMidRange;
+  sevenBands.presence = preset.presence;
+  sevenBands.brilliance = preset.brilliance;
 }
 
 function setBackgroundColor(hex)
@@ -258,6 +519,7 @@ function setOverlaySize(size)
 function toggleOverlay(val)
 {
   document.getElementById('overlay').style.visibility = !val ? "hidden" : "visible";
+  // document.getElementById('overlay').style.visibility = "visible";
 }
 
 function pauseVideoBackground(isPaused)
