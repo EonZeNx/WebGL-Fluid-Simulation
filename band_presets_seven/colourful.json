@@ -1,0 +1,88 @@
+{
+  "subBass": [
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": 1},
+      "velocity": 0.66,
+      "location": {"x": 0.1, "y": 0.1},
+      "rotation": 0
+    },
+    {
+      "colour": {"h": {"min": 0, "max": 0.05}, "s": 1, "v": 1},
+      "velocity": 0.66,
+      "location": {"x": 0.9, "y": 0.1},
+      "rotation": 180
+    }
+  ],
+  "bass": [
+    {
+      "colour": {"h": {"min": 0.1, "max": 0.2}, "s": 1, "v": 1},
+      "velocity": 0.4,
+      "location": {"x": 0, "y": 0.15},
+      "rotation": 90
+    },
+    {
+      "colour": {"h": {"min": 0.1, "max": 0.2}, "s": 1, "v": 1},
+      "velocity": 0.4,
+      "location": {"x": 1, "y": 0.15},
+      "rotation": 90
+    }
+  ],
+  "lowMidRange": [
+    {
+      "colour": {"h": {"min": 0.6, "max": 0.7}, "s": 1, "v": 1},
+      "velocity": 0.5,
+      "location": {"x": 0.5, "y": 0.45},
+      "rotation": -90
+    }
+  ],
+  "midRange": [
+    {
+      "colour": {"h": {"min": 0.5, "max": 0.6}, "s": 1, "v": 1},
+      "velocity": 0.5,
+      "location": {"x": 0.5, "y": 0.55},
+      "rotation": 90
+    }
+  ],
+  "upperMidRange": [
+    {
+      "colour": {"h": {"min": 0.6, "max": 0.7}, "s": 1, "v": 1},
+      "velocity": 0.66,
+      "location": {"x": 0.1, "y": 0.9},
+      "rotation": 0
+    },
+    {
+      "colour": {"h": {"min": 0.6, "max": 0.7}, "s": 1, "v": 1},
+      "velocity": 0.66,
+      "location": {"x": 0.1, "y": 0.9},
+      "rotation": 180
+    }
+  ],
+  "presence": [
+    {
+      "colour": {"h": {"min": 0.7, "max": 0.8}, "s": 1, "v": 1},
+      "velocity": 0.4,
+      "location": {"x": 0, "y": 0.85},
+      "rotation": -90
+    },
+    {
+      "colour": {"h": {"min": 0.7, "max": 0.8}, "s": 1, "v": 1},
+      "velocity": 0.4,
+      "location": {"x": 1, "y": 0.58},
+      "rotation": -90
+    }
+  ],
+  "brilliance": [
+    {
+      "colour": {"h": {"min": 0.7, "max": 0.9}, "s": 1, "v": 1},
+      "velocity": 1,
+      "location": {"x": {"min": 0.3, "max": 0.7}, "y": 0},
+      "rotation": {"min": -180, "max": 180}
+    },
+    {
+      "colour": {"h": {"min": 0.7, "max": 0.9}, "s": 1, "v": 1},
+      "velocity": 1,
+      "location": {"x": {"min": 0.3, "max": 0.7}, "y": 0},
+      "rotation": {"min": -180, "max": 180}
+    }
+  ]
+}

@@ -7,11 +7,15 @@ class Range {
   }
 
   static fromValue(value) {
-    return new Range(value, 0, 0, true);
+    return new this(value, 0, 0, true);
+  }
+
+  static fromMinMax(min, max) {
+    return new this((min + max) / 2, min, max);
   }
 
   static fromZero() {
-    return new Range(0, 0, 0, true);
+    return new this(0, 0, 0);
   }
 
   hasRange() {

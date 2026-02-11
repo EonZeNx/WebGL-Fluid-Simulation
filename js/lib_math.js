@@ -49,3 +49,10 @@ function initLastTick() {
 function calcLayerPos(basePosition = 0, rotation = 0, index = 0) {
   return basePosition - (rotation / 3.14) * (0.15 * (index + 1));
 }
+
+async function loadPresetFromFile(filepath) {
+  const relativePath = `.\\${filepath}`;
+
+  return await fetch(relativePath)
+    .then(res => res.json());
+}

@@ -7,154 +7,155 @@ let volumeAmbientThresholdTimeout = 0;
 let isTickingAmbientVolume = false;
 
 // Berserker rage
-let simpleBands = {
-  bassSplats: [
+let threeBands = {
+  bass: [
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.85),
       new Location(Range.fromValue(0.4), Range.fromValue(0.5)),
       Rotation.fromValue(180),
       [
-        new SimpleBand(new Colour(Range.fromZero(), Range.fromValue(0.35), Range.fromValue(1)), new Velocity(0.85))
+        new SimpleBand(new Colour(Range.fromZero(), Range.fromValue(0.35), Range.fromValue(1)), Velocity.fromValue(0.85))
       ]
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.85),
       new Location(Range.fromValue(0.6), Range.fromValue(0.5)),
       Rotation.fromValue(0),
       [
-        new SimpleBand(new Colour(Range.fromZero(), Range.fromValue(0.35), Range.fromValue(1)), new Velocity(0.85))
+        new SimpleBand(new Colour(Range.fromZero(), Range.fromValue(0.35), Range.fromValue(1)), Velocity.fromValue(0.85))
       ]
     )
   ],
-  midRangeSplats: [
+  midRange: [
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.5),
-      new Location(new Range(0.5, 0, 0), new Range(0.35, 0, 0)),
+      new Location(Range.fromValue(0.5), Range.fromValue(0.35)),
       Rotation.fromValue(-90)
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.5),
-      new Location(new Range(0.5, 0, 0), new Range(0.65, 0, 0)),
+      new Location(Range.fromValue(0.5), Range.fromValue(0.65)),
       Rotation.fromValue(90)
     ),
   ],
-  highSplats: [
+  high: [
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), new Range(0.75, 0.7, 0.8)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromMinMax(0.7, 0.8)),
       Velocity.fromValue(0.25),
-      new Location(new Range(0.1, 0.1, 0.4), new Range(0.3, 0.1, 0.4)),
-      new Rotation(0, 0, 360)
+      new Location(Range.fromMinMax(0.1, 0.4), Range.fromMinMax(0.1, 0.4)),
+      Rotation.fromMinMax(-180, 180)
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), new Range(0.75, 0.7, 0.8)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromMinMax(0.7, 0.8)),
       Velocity.fromValue(0.25),
-      new Location(new Range(0.3, 0.1, 0.4), new Range(0.8, 0.6, 0.9)),
-      new Rotation(0, 0, 360)
+      new Location(Range.fromMinMax(0.1, 0.4), Range.fromMinMax(0.6, 0.9)),
+      Rotation.fromMinMax(-180, 180)
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), new Range(0.75, 0.7, 0.8)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromMinMax(0.7, 0.8)),
       Velocity.fromValue(0.25),
-      new Location(new Range(0.8, 0.6, 0.9), new Range(0.3, 0.1, 0.4)),
-      new Rotation(0, 0, 360)
+      new Location(Range.fromMinMax(0.6, 0.9), Range.fromMinMax(0.1, 0.4)),
+      Rotation.fromMinMax(-180, 180)
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), new Range(0.75, 0.7, 0.8)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromMinMax(0.7, 0.8)),
       Velocity.fromValue(0.25),
-      new Location(new Range(0.8, 0.6, 0.9), new Range(0.8, 0.6, 0.9)),
-      new Rotation(0, 0, 360)
+      new Location(Range.fromMinMax(0.6, 0.9), Range.fromMinMax(0.6, 0.9)),
+      Rotation.fromMinMax(-180, 180)
     )
   ],
 };
 
-let fullBands = {
-  subSplats: [
+// Colourful
+let sevenBands = {
+  subBass: [
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.66),
-      new Location(new Range(0.1, 0, 0), new Range(0.1, 0, 0)),
+      new Location(Range.fromValue(0.1), Range.fromValue(0.1)),
       Rotation.fromValue(0)
     ),
     new Band(
-      new Colour(new Range(0, 0, 0.05), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0, 0.05), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.66),
-      new Location(new Range(0.9, 0, 0), new Range(0.1, 0, 0)),
+      new Location(Range.fromValue(0.9), Range.fromValue(0.1)),
       Rotation.fromValue(180)
     )
   ],
-  bassSplats: [
+  bass: [
     new Band(
-      new Colour(new Range(0.1, 0.1, 0.2), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.1, 0.2), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.4),
-      new Location(new Range(0, 0, 0), new Range(0.15, 0, 0)),
+      new Location(Range.fromValue(0), Range.fromValue(0.15)),
       Rotation.fromValue(90)
     ),
     new Band(
-      new Colour(new Range(0.1, 0.1, 0.2), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.1, 0.2), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.4),
-      new Location(new Range(1, 0, 0), new Range(0.15, 0, 0)),
+      new Location(Range.fromValue(1), Range.fromValue(0.15)),
       Rotation.fromValue(90)
     )
   ],
-  lowMidRangeSplats: [
+  lowMidRange: [
     new Band(
-      new Colour(new Range(0.65, 0.6, 0.7), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.6, 0.7), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.5),
-      new Location(new Range(0.5, 0, 0), new Range(0.45, 0, 0)),
+      new Location(Range.fromValue(0.5), Range.fromValue(0.45)),
       Rotation.fromValue(-90)
     )
   ],
-  midRangeSplats: [
+  midRange: [
     new Band(
-      new Colour(new Range(0.55, 0.5, 0.6), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.5, 0.6), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.5),
-      new Location(new Range(0.5, 0, 0), new Range(0.55, 0, 0)),
+      new Location(Range.fromValue(0.5), Range.fromValue(0.55)),
       Rotation.fromValue(90)
     )
   ],
-  upperMidRangeSplats: [
+  upperMidRange: [
     new Band(
-      new Colour(new Range(0.65, 0.6, 0.7), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.5, 0.6), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.66),
-      new Location(new Range(0.1, 0, 0), new Range(0.9, 0, 0)),
+      new Location(Range.fromValue(0.1), Range.fromValue(0.9)),
       Rotation.fromValue(0)
     ),
     new Band(
-      new Colour(new Range(0.65, 0.6, 0.7), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.5, 0.6), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.66),
-      new Location(new Range(0.9, 0, 0), new Range(0.9, 0, 0)),
+      new Location(Range.fromValue(0.9), Range.fromValue(0.9)),
       Rotation.fromValue(180)
     ),
   ],
-  presenceSplats: [
+  presence: [
     new Band(
-      new Colour(new Range(0.75, 0.7, 0.8), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.7, 0.8), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.4),
-      new Location(new Range(0, 0, 0), new Range(0.85, 0, 0)),
+      new Location(Range.fromValue(0), Range.fromValue(0.85)),
       Rotation.fromValue(-90)
     ),
     new Band(
-      new Colour(new Range(0.75, 0.7, 0.8), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.7, 0.8), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(0.4),
-      new Location(new Range(1, 0, 0), new Range(0.85, 0, 0)),
+      new Location(Range.fromValue(1), Range.fromValue(0.85)),
       Rotation.fromValue(-90)
     )
   ],
-  brillianceSplats: [
+  brilliance: [
     new Band(
-      new Colour(new Range(0.8, 0.7, 0.9), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.7, 0.9), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(1),
-      new Location(new Range(0, 0.3, 0.7), new Range(0)),
-      new Rotation(180, 0, 360)
+      new Location(Range.fromMinMax(0.3, 0.7), Range.fromValue(0)),
+      Rotation.fromMinMax(-180, 180)
     ),
     new Band(
-      new Colour(new Range(0.8, 0.7, 0.9), Range.fromValue(1), Range.fromValue(1)),
+      new Colour(Range.fromMinMax(0.7, 0.9), Range.fromValue(1), Range.fromValue(1)),
       Velocity.fromValue(1),
-      new Location(new Range(0, 0.3, 0.7), new Range(0)),
-      new Rotation(180, 0, 360)
+      new Location(Range.fromMinMax(0.3, 0.7), Range.fromValue(0)),
+      Rotation.fromMinMax(-180, 180)
     )
   ],
 };
@@ -316,9 +317,9 @@ function tickSimpleAudio(audio = [0]) {
   const highMinVolumeChange = 5 / 1000;
 
   // Tick
-  simpleDeltas.bass = calcTickAudio(simpleBands.bassSplats, bassVolume, simpleDeltas.bass, 0.1, bassMinVolumeChange);
-  simpleDeltas.midRange = calcTickAudio(simpleBands.midRangeSplats, midRangeVolume, simpleDeltas.midRange, 0.075, midMinVolumeChange);
-  simpleDeltas.high = calcTickAudio(simpleBands.highSplats, highVolume, simpleDeltas.high, 0.05, highMinVolumeChange);
+  simpleDeltas.bass = calcTickAudio(threeBands.bass, bassVolume, simpleDeltas.bass, 0.1, bassMinVolumeChange);
+  simpleDeltas.midRange = calcTickAudio(threeBands.midRange, midRangeVolume, simpleDeltas.midRange, 0.075, midMinVolumeChange);
+  simpleDeltas.high = calcTickAudio(threeBands.high, highVolume, simpleDeltas.high, 0.05, highMinVolumeChange);
 }
 
 function tickFullAudio(audio = [0]) {
@@ -373,13 +374,13 @@ function tickFullAudio(audio = [0]) {
   const highMinVolumeChange = 5 / 1000;
 
   // Tick
-  fullDeltas.subBass = calcTickAudio(fullBands.subSplats, subBassVolume, fullDeltas.subBass, 0.1, bassMinVolumeChange);
-  fullDeltas.bass = calcTickAudio(fullBands.bassSplats, bassVolume, fullDeltas.bass, 0.1, bassMinVolumeChange);
-  fullDeltas.lowMidRange = calcTickAudio(fullBands.lowMidRangeSplats, lowMidVolume, fullDeltas.lowMidRange, 0.075, midMinVolumeChange);
-  fullDeltas.midRange = calcTickAudio(fullBands.midRangeSplats, midVolume, fullDeltas.midRange, 0.075, midMinVolumeChange);
-  fullDeltas.upperMidRange = calcTickAudio(fullBands.upperMidRangeSplats, upperMidVolume, fullDeltas.upperMidRange, 0.075, midMinVolumeChange);
-  fullDeltas.presence = calcTickAudio(fullBands.presenceSplats, presenceVolume, fullDeltas.presence, 0.05, highMinVolumeChange);
-  fullDeltas.brilliance = calcTickAudio(fullBands.brillianceSplats, brillianceVolume, fullDeltas.brilliance, 0.05, highMinVolumeChange);
+  fullDeltas.subBass = calcTickAudio(sevenBands.subBass, subBassVolume, fullDeltas.subBass, 0.1, bassMinVolumeChange);
+  fullDeltas.bass = calcTickAudio(sevenBands.bass, bassVolume, fullDeltas.bass, 0.1, bassMinVolumeChange);
+  fullDeltas.lowMidRange = calcTickAudio(sevenBands.lowMidRange, lowMidVolume, fullDeltas.lowMidRange, 0.075, midMinVolumeChange);
+  fullDeltas.midRange = calcTickAudio(sevenBands.midRange, midVolume, fullDeltas.midRange, 0.075, midMinVolumeChange);
+  fullDeltas.upperMidRange = calcTickAudio(sevenBands.upperMidRange, upperMidVolume, fullDeltas.upperMidRange, 0.075, midMinVolumeChange);
+  fullDeltas.presence = calcTickAudio(sevenBands.presence, presenceVolume, fullDeltas.presence, 0.05, highMinVolumeChange);
+  fullDeltas.brilliance = calcTickAudio(sevenBands.brilliance, brillianceVolume, fullDeltas.brilliance, 0.05, highMinVolumeChange);
 }
 
 function tickExceedingVolumeAudio() {

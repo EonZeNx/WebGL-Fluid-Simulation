@@ -23,6 +23,20 @@
       "Full bands"
     ]
   },
+  "threeBandsSrc": {
+    "type": "folderDropdown",
+    "value": "berserker_rage.json",
+    "text": "Three band preset",
+    "filter": "*.json",
+    "folder": "band_presets_three"
+  },
+  "sevenBandsSrc": {
+    "type": "folderDropdown",
+    "value": "colourful.json",
+    "text": "Seven band preset",
+    "filter": "*.json",
+    "folder": "band_presets_seven"
+  },
 
   "label1": {
     "type": "label",
