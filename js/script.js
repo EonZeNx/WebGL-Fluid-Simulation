@@ -160,7 +160,7 @@ let isBackground = false;
 function livelyPropertyListener(name, val) {
   switch (name) {
     case "quality":
-      config.DYE_RESOLUTION = [1024, 512, 256, 128][val];
+      config.DYE_RESOLUTION = [2048, 1024, 512, 256, 128][val];
       initFramebuffers();
       break;
     case "simResolution":

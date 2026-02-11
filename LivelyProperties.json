@@ -19,8 +19,8 @@
     "text": "Audio Splats type",
     "items": [
       "Random",
-      "Simple bands",
-      "Full bands"
+      "Three band",
+      "Seven band"
     ]
   },
   "threeBandsSrc": {
@@ -47,6 +47,7 @@
     "value": 0,
     "text": "Quality",
     "items": [
+      "Ultra",
       "High",
       "Medium",
       "Low",
